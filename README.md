@@ -137,4 +137,7 @@ After a few mins, run the below command to verify the cluster installation.
 ```
 kops validate cluster example.k8s.local
 ```
-
+Delete the cluster
+```
+kops delete cluster --name=example.k8s.local --state=s3://k8s-my-kops-state-store --yes
+```
