@@ -53,6 +53,18 @@ curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://
 chmod +x kops-linux-amd64
 
 sudo mv kops-linux-amd64 /usr/local/bin/kops
+
+kops  # test if install properly
+```
+
+### Install kubectl
+
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+kubectl # test if install properly
 ```
 
 ### Provide the below permissions to your IAM user. If you are using the admin user, the below permissions are available by default
@@ -73,13 +85,37 @@ Please follow the steps carefully and read each command before executing.
 ### Create S3 bucket for storing the KOPS objects.
 
 ```
-aws s3api create-bucket --bucket kops-abhi-storage --region us-east-1
+aws s3api create-bucket   --bucket k8s-my-kops-state-store   --region us-east-1
+
+export KOPS_STATE_STORE=s3://k8s-my-kops-state-store
+```
+```
+ubuntu@ip-172-31-27-116:~$ aws s3api create-bucket   --bucket k8s-my-kops-state-store   --region us-east-1
+{
+    "Location": "/k8s-my-kops-state-store",
+    "BucketArn": "arn:aws:s3:::k8s-my-kops-state-store"
+}
 ```
 
 ### Create the cluster 
 
 ```
-kops create cluster --name=demok8scluster.k8s.local --state=s3://kops-abhi-storage --zones=us-east-1a --node-count=1 --node-size=t2.micro --master-size=t2.micro  --master-volume-size=8 --node-volume-size=8
+kops create cluster --name=example.k8s.local --state=${KOPS_STATE_STORE} --zones=us-east-1a --node-count=1 --node-size=t2.micro --master-size=t2.micro  --master-volume-size=8 --node-volume-size=8
+```
+```
+ubuntu@ip-172-31-27-116:~$ kops create cluster --name=example.k8s.local --state=${KOPS_STATE_STORE} --zones=us-east-1a -
+-node-count=1 --node-size=t2.micro --master-size=t2.micro  --master-volume-size=8 --node-volume-size=8
+************************
+***********************************
+Cluster configuration has been created.
+
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster example.k8s.local
+ * edit your node instance group: kops edit ig --name=example.k8s.local nodes-us-east-1a
+ * edit your control-plane instance group: kops edit ig --name=example.k8s.local control-plane-us-east-1a
+
+Finally configure your cluster with: kops update cluster --name example.k8s.local --yes --admin
 ```
 
 ### Important: Edit the configuration as there are multiple resources created which won't fall into the free tier.
