@@ -127,7 +127,7 @@ kops edit cluster example.k8s.local
 Step 12: Build the cluster
 
 ```
-kops update cluster example.k8s.local --yes --state=s3://kops-abhi-storage
+kops update cluster example.k8s.local --yes --state=s3://k8s-my-kops-state-store
 ```
 
 This will take a few minutes to create............
