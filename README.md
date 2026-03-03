@@ -121,7 +121,7 @@ Finally configure your cluster with: kops update cluster --name example.k8s.loca
 ### Important: Edit the configuration as there are multiple resources created which won't fall into the free tier.
 
 ```
-kops edit cluster myfirstcluster.k8s.local
+kops edit cluster example.k8s.local
 ```
 
 Step 12: Build the cluster
