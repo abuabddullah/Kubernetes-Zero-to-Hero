@@ -141,3 +141,8 @@ Delete the cluster
 ```
 kops delete cluster --name=example.k8s.local --state=s3://k8s-my-kops-state-store --yes
 ```
+চেক করো ডিলিট হয়েছে কি না:
+```
+kops get cluster --name example.k8s.local --state=s3://k8s-my-kops-state-store
+```
+যদি "No cluster found" বলে → ডিলিট সাকসেস!
